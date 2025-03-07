@@ -30,7 +30,7 @@ export default function Home() {
           </div>
           <p className="text-gray-600 text-sm text-center ">
             Upload only creative drawings, treasured artifacts,historical
-            photographs or artifacts
+            photographs
           </p>
           {/* get start button  */}
           <div className="flex justify-center align-middle mt-8">
