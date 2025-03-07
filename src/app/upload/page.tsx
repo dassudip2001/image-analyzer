@@ -1,14 +1,22 @@
 "use client";
-import { UploadIcon } from "lucide-react";
+import UploadFile from "@/components/UploadFile";
 import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function UploadPage() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit } = useForm();
   const onSubmit = (data) => {
+    // toast
+    toast("Artwork created successfully!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
     console.log(data);
   };
 
@@ -19,24 +27,16 @@ export default function UploadPage() {
           <h1 className="text-5xl font-serif text-[#2B4570] text-center mb-12">
             Create Your Art
           </h1>
-
+          <ToastContainer />
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Image Upload Section */}
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <div className="border-2 border-dashed border-[#FFE135] rounded-xl p-8 hover:border-[#FF69B4] transition cursor-pointer bg-[#FFE135]/5 text-center">
-                <UploadIcon className="w-12 h-12 mx-auto mb-4 text-[#2B4570]" />
-                <p className="text-[#2B4570] mb-2">
-                  Drag and drop your image here
-                </p>
-                <p className="text-[#2B4570]/60 text-sm mb-4">or</p>
-                <button
-                  type="button"
-                  className="bg-[#2B4570] hover:bg-[#2B4570]/90 text-white px-6 py-2 rounded-lg transition font-serif"
-                >
-                  Choose File
-                </button>
-              </div>
-            </div>
+            <UploadFile
+              onFileSelect={(file) => console.log("Selected file:", file)}
+              onUploadComplete={(url) => {
+                console.log("URL uploaded:", url);
+                // reset((prev) => ({ ...prev, public_path: url }));
+              }}
+            />
 
             {/* Input Fields */}
             <div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
