@@ -25,7 +25,7 @@ export default function Home() {
           </div>
           <div className="flex items-center justify-center gap-2">
             <p className="text-[#2B4570]/70 text-lg font-light align-bottom">
-              Click to begin your artistic journey
+              Click to Begin Your Artistic Journey
             </p>
           </div>
           {/* get start button  */}
