@@ -1,19 +1,17 @@
 "use client";
 import { UploadIcon } from "lucide-react";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function UploadPage() {
-  const [formData, setFormData] = useState({
-    title: "",
-    category: "",
-    description: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log(formData);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
   };
+
   return (
     <>
       <div className="min-h-screen bg-gradient-to-b from-[#FFE135]/10 to-[#FF69B4]/10 p-4">
@@ -22,7 +20,7 @@ export default function UploadPage() {
             Create Your Art
           </h1>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Image Upload Section */}
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <div className="border-2 border-dashed border-[#FFE135] rounded-xl p-8 hover:border-[#FF69B4] transition cursor-pointer bg-[#FFE135]/5 text-center">
@@ -60,10 +58,7 @@ export default function UploadPage() {
                 <input
                   type="text"
                   id="title"
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
+                  {...register("title", { required: true })}
                   className="w-full px-4 py-2 rounded-lg border border-[#FFE135] focus:border-[#FF69B4] focus:ring focus:ring-[#FF69B4]/20 transition outline-none"
                   placeholder="Enter your artwork title"
                 />
@@ -79,10 +74,7 @@ export default function UploadPage() {
                 <input
                   type="text"
                   id="category"
-                  value={formData.category}
-                  onChange={(e) =>
-                    setFormData({ ...formData, category: e.target.value })
-                  }
+                  {...register("name")}
                   className="w-full px-4 py-2 rounded-lg border border-[#FFE135] focus:border-[#FF69B4] focus:ring focus:ring-[#FF69B4]/20 transition outline-none"
                   placeholder="Enter Your Name"
                 />
@@ -98,10 +90,7 @@ export default function UploadPage() {
                 <input
                   type="text"
                   id="category"
-                  value={formData.category}
-                  onChange={(e) =>
-                    setFormData({ ...formData, category: e.target.value })
-                  }
+                  {...register("email")}
                   className="w-full px-4 py-2 rounded-lg border border-[#FFE135] focus:border-[#FF69B4] focus:ring focus:ring-[#FF69B4]/20 transition outline-none"
                   placeholder="Enter Your Email"
                 />
@@ -116,10 +105,7 @@ export default function UploadPage() {
                 </label>
                 <textarea
                   id="description"
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
+                  {...register("content")}
                   rows={4}
                   className="w-full px-4 py-2 rounded-lg border border-[#FFE135] focus:border-[#FF69B4] focus:ring focus:ring-[#FF69B4]/20 transition outline-none resize-none"
                   placeholder="Describe your artwork..."
