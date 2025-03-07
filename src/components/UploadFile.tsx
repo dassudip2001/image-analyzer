@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import axios from "axios";
 import { UploadIcon } from "lucide-react";
 
@@ -15,19 +15,18 @@ export default function FileUpload({
   const [preview, setPreview] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const uploadFile = async (file: File) => {
     try {
       setIsUploading(true);
       const formData = new FormData();
       formData.append("file", file);
-
       const response = await axios.post("/api/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
       onUploadComplete?.(response.data.publicId);
       return response.data.url;
     } catch (error) {
@@ -40,31 +39,32 @@ export default function FileUpload({
 
   const handleFile = async (file: File | null) => {
     if (!file) return;
-
     if (!file.type.startsWith("image/")) {
       alert("Please upload an image file");
       return;
     }
-
     if (file.size > 10 * 1024 * 1024) {
       alert("File must be smaller than 10MB");
       return;
     }
-
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreview(reader.result as string);
     };
     reader.readAsDataURL(file);
     onFileSelect?.(file);
-
     await uploadFile(file);
+  };
+
+  const handleButtonClick = () => {
+    // Programmatically trigger the file input click
+    fileInputRef.current?.click();
   };
 
   return (
     <div className="bg-white rounded-2xl shadow-xl p-8">
       <div
-        className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition 
+        className={`border-2 border-dashed rounded-xl p-8 text-center transition
           ${
             isDragging ? "border-[#FF69B4]" : "border-[#FFE135]"
           } bg-[#FFE135]/5 hover:border-[#FF69B4]`}
@@ -79,13 +79,16 @@ export default function FileUpload({
           handleFile(e.dataTransfer.files[0]);
         }}
       >
+        {/* Hidden file input that will be triggered by the button */}
         <input
+          ref={fileInputRef}
           type="file"
-          className="absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer"
+          className="hidden"
           onChange={(e) => handleFile(e.target.files?.[0] || null)}
           accept="image/png,image/jpeg,image/gif"
           disabled={isUploading}
         />
+
         {preview ? (
           <div className="relative w-full aspect-video">
             <img
@@ -102,8 +105,10 @@ export default function FileUpload({
             <button
               type="button"
               className="bg-[#2B4570] hover:bg-[#2B4570]/90 text-white px-6 py-2 rounded-lg transition font-serif"
+              onClick={handleButtonClick}
+              disabled={isUploading}
             >
-              Choose File
+              {isUploading ? "Uploading..." : "Choose File"}
             </button>
           </>
         )}
