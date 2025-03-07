@@ -53,6 +53,14 @@ export default function UploadPage() {
         });
       }
       setIseLoading(false);
+      setValue("title", "");
+      setValue("name", "");
+      setValue("email", "");
+      setValue("content", "");
+      setValue("imagePath", "");
+      setUploadedImageUrl(null);
+      // navigate to home page
+      window.location.href = "/";
     } catch (error) {
       console.error("Error ", error);
       setIseLoading(false);
