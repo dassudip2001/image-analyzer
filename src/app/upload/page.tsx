@@ -60,7 +60,8 @@ export default function UploadPage() {
       setValue("imagePath", "");
       setUploadedImageUrl(null);
       // navigate to home page
-      window.location.href = "/";
+      window.location.href = "https://collection-system.vercel.app/ui/grid-ui"; // go to another url
+      // router
     } catch (error) {
       console.error("Error ", error);
       setIseLoading(false);
